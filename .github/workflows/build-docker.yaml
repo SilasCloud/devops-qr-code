@@ -15,5 +15,4 @@ jobs:
         run: docker build ./api/ -t echelonkay/devops-qr-code-api:latest
         
       - name: push image to docker hub
-        run: |
-        docker push echelonkay/devops-qr-code-api:latest
+        run: docker push echelonkay/devops-qr-code-api:latest
