@@ -1,4 +1,4 @@
-name: Publish Docker image to Docker Hub
+name: Build and Publish Image to Docker Hub
 
 on:
   [workflow_dispatch]  # This allows manual triggering from GitHub UI
@@ -14,5 +14,6 @@ jobs:
       - name: Build image
         run: docker build ./api/ -t echelonkay/devops-qr-code-api:latest
         
-      - name: |
-        run: docker push echelonkay/devops-qr-code-api:latest
+      - name: push image to docker hub
+        run: |
+        docker push echelonkay/devops-qr-code-api:latest
