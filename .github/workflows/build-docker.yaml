@@ -9,12 +9,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: build image
-        run: |
-          docker build ./api/ -t echelonkay/devops-qr-code-api:latest
-          docker build ./front-end-nextjs/ -t echelonkay/devops-qr-code-frontend:latest
-      - name: push image to docker hub
-        run: |
-          docker login -u echelonkay -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker push echelonkay/devops-qr-code-api:latest
-          docker push echelonkay/devops-qr-code-frontend:latest
+        
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "echelonkay" --password-stdin
+        
+      - name: Build API image
+        run: docker build ./api/ -t echelonkay/devops-qr-code-api:latest --no-cache
+        
+      - name: Build Frontend image
+        run: docker build ./front-end-nextjs/ -t echelonkay/devops-qr-code-frontend:latest --no-cache
+        
+      - name: Push API image to Docker Hub
+        run: docker push echelonkay/devops-qr-code-api:latest
+        
+      - name: Push Frontend image to Docker Hub
+        run: docker push echelonkay/devops-qr-code-frontend:latest
