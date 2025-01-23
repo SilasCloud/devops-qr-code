@@ -1,26 +1,57 @@
-name: Build and Publish Image to Docker Hub
+name: Build and Publish Docker Images
 
 on:
-  [workflow_dispatch]  # This allows manual triggering from GitHub UI
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+    inputs:
+      api_image_tag:
+        description: "Tag for the API image"
+        default: "latest"
+        required: false
+      frontend_image_tag:
+        description: "Tag for the Frontend image"
+        default: "latest"
+        required: false
 
 jobs:
-  publish_images:
+  build_and_push_images:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      # Step 1: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
-        
+
+      # Step 2: Log in to Docker Hub
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "echelonkay" --password-stdin
-        
-      - name: Build API image
-        run: docker build ./api/ -t echelonkay/devops-qr-code-api:latest --no-cache
-        
-      - name: Build Frontend image
-        run: docker build ./front-end-nextjs/ -t echelonkay/devops-qr-code-frontend:latest --no-cache
-        
-      - name: Push API image to Docker Hub
-        run: docker push echelonkay/devops-qr-code-api:latest
-        
-      - name: Push Frontend image to Docker Hub
-        run: docker push echelonkay/devops-qr-code-frontend:latest
+        uses: docker/login-action@v2
+        with:
+          username: echelonkay
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # Step 3: Build API Docker Image
+      - name: Build API Docker Image
+        run: |
+          docker build ./api/ \
+            -t echelonkay/devops-qr-code-api:${{ github.event.inputs.api_image_tag }} \
+            -t echelonkay/devops-qr-code-api:latest \
+            --no-cache
+
+      # Step 4: Push API Docker Image
+      - name: Push API Docker Image
+        run: |
+          docker push echelonkay/devops-qr-code-api:${{ github.event.inputs.api_image_tag }}
+          docker push echelonkay/devops-qr-code-api:latest
+
+      # Step 5: Build Frontend Docker Image
+      - name: Build Frontend Docker Image
+        run: |
+          docker build ./front-end-nextjs/ \
+            -t echelonkay/devops-qr-code-frontend:${{ github.event.inputs.frontend_image_tag }} \
+            -t echelonkay/devops-qr-code-frontend:latest \
+            --no-cache
+
+      # Step 6: Push Frontend Docker Image
+      - name: Push Frontend Docker Image
+        run: |
+          docker push echelonkay/devops-qr-code-frontend:${{ github.event.inputs.frontend_image_tag }}
+          docker push echelonkay/devops-qr-code-frontend:latest
