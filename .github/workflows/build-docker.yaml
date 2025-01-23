@@ -6,15 +6,15 @@ on:
 jobs:
   publish_images:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Build image
-        run: docker build ./api/ -t echelonkay/devops-qr-code-api:latest
-        
+      - name: build image
+        run: |
+          docker build ./api/ -t echelonkay/devops-qr-code-api:latest
+          docker build ./front-end-nextjs/ -t echelonkay/devops-qr-code-frontend:latest
       - name: push image to docker hub
         run: |
-        docker login -u echelonkay -p ${{ secrets.DOCKER_HUB_TOKEN }}
-        docker push echelonkay/devops-qr-code-api:latest
+          docker login -u echelonkay -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push echelonkay/devops-qr-code-api:latest
+          docker push echelonkay/devops-qr-code-frontend:latest
