@@ -22,7 +22,11 @@ The API code exists in the `api` directory. You can run the API server locally:
 - Create a virtualenv by typing in the following command: `python3 -m venv .venv`
 - Run command `source .venv/bin`
 - Run command `source .venv/bin/activate`
+<<<<<<< HEAD
 - Install the required packages: `pip install -r requirements.txt` 'or pip install fastapi uvicorn boto3 python-dotenv pytest qrcode' 
+=======
+- Install the required packages: `pip install -r requirements.txt` or `pip install fastapi uvicorn boto3 python-dotenv pytest qrcode`
+>>>>>>> 9db5a81 (Moved Terraform files into the infrastructure folder)
 - Create a `.env` file, and add you AWS Access and Secret key, check  `.env.example`
 - and Save the Access & secret key, cat the `.env` to verify. 
 - Also, change the BUCKET_NAME to your S3 bucket name in `main.py`
